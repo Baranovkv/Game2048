@@ -48,6 +48,7 @@ struct GameView: View {
 			switch game.gameMode {
 			case .classic:
 				Text("Текущий счет: \(game.score.description)")
+				Text("Лучший результат: \(game.bestScore.description)")
 			case .specialists:
 				HStack {
 					Text("Наиболее опытный специалист в команде:")

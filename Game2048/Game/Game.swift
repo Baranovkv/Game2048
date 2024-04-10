@@ -20,23 +20,41 @@ enum GameModes: String, CaseIterable {
 final class Game: ObservableObject {
 	
 	@Published var cells: GameCells = GameCells()
-	@Published var score: Int = 0
+	@Published var score: Int = 0 {
+		didSet {
+			updateBestScore()
+		}
+	}
+	
+	@Published var bestScore: Int
 	@Published var isGameOver = false
 	@Published var gameMode: GameModes = .specialists
 	
 	var cellWithMaxResult: GameCell {
 		cells.oneDimensional.max(by: { $0.value < $1.value }) ?? GameCell()
 	}
+	
 	private var showResults = false
+	private let savePath = URL.documentsDirectory.appending(path: "bestScore")
+	
+	init() {
+		do {
+			let data = try Data(contentsOf: savePath)
+			bestScore = try JSONDecoder().decode(Int.self, from: data)
+		} catch {
+			print("Failed to load best score data")
+			bestScore = 0
+		}
+	}
 	
 	//MARK: - intents:
 	
 	func startNewGame() {
-//		withAnimation {
-			score = 0
-			cells = GameCells()
-			showResults = false
-//		}
+		//		withAnimation {
+		score = 0
+		cells = GameCells()
+		showResults = false
+		//		}
 	}
 	
 	func seeResults() {
@@ -61,12 +79,12 @@ final class Game: ObservableObject {
 				self.handleGesture(direction: .toBottom)
 			}
 		}
-
+		
 	}
 	
 	//MARK: - private functions
 	private func handleGesture(direction: Directions) {
-			
+		
 		let originalCells = getCurrentCellsValues()
 		
 		withAnimation(.linear(duration: 0.1)) {
@@ -92,7 +110,7 @@ final class Game: ObservableObject {
 		if !checkForAvailableMoves() {
 			isGameOver = true
 		}
-
+		
 	}
 	
 	private func checkForAvailableMoves() -> Bool {
@@ -199,6 +217,18 @@ final class Game: ObservableObject {
 				}
 			} else {
 				cells.moveItems(from: currentIndex)
+			}
+		}
+	}
+	
+	private func updateBestScore() {
+		if score > bestScore && gameMode == .classic {
+			bestScore = score
+			do {
+				let data = try JSONEncoder().encode(score)
+				try data.write(to: savePath, options: [.atomic, .completeFileProtection])
+			} catch {
+				print("Unable to save data")
 			}
 		}
 	}

@@ -8,7 +8,7 @@
 import Foundation
 
 struct GameCells {
-		
+	
 	let side: Int
 	var oneDimensional: [GameCell]
 	
