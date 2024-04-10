@@ -18,11 +18,7 @@ struct SpecialistCellView: View {
 			}
 			.clipShape(RoundedRectangle(cornerRadius: 4))
 			.shadow(radius: 2)
-		
-		
-		
 			.transition(.scale)
-		
 	}
 	
 	private var label: some View {
@@ -41,7 +37,6 @@ struct SpecialistCellView: View {
 					)
 				)
 		}
-		
 	}
 }
 

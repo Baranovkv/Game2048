@@ -13,10 +13,12 @@ enum Directions: CaseIterable {
 }
 
 enum GameModes: String, CaseIterable {
-	case classic = "Классический",
-		 specialists = "Специалисты"
+	case specialists = "Специалисты",
+		 classic = "Классический"
 }
 
+
+//MARK: - Game viewModel
 final class Game: ObservableObject {
 	
 	@Published var cells: GameCells = GameCells()

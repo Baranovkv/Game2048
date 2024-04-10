@@ -38,33 +38,29 @@ struct GameView: View {
 			if game.gameMode == .specialists {
 				Text("IT Специалисты")
 			}
-			
 		}
 		.padding()
 	}
 	
 	@ViewBuilder
 	private var score: some View {
-			switch game.gameMode {
-			case .classic:
-				Text("Текущий счет: \(game.score.description)")
-				Text("Лучший результат: \(game.bestScore.description)")
-			case .specialists:
-				HStack {
-					Text("Наиболее опытный специалист в команде:")
-					Spacer()
-					SpecialistCellView(cell: game.cellWithMaxResult)
-					
-				}
-				.padding(.horizontal)
+		switch game.gameMode {
+		case .classic:
+			Text("Текущий счет: \(game.score.description)")
+			Text("Лучший результат: \(game.bestScore.description)")
+		case .specialists:
+			HStack {
+				Text("Наиболее опытный специалист в команде:")
+				Spacer()
+				SpecialistCellView(cell: game.cellWithMaxResult)
 			}
+			.padding(.horizontal)
+		}
 	}
 	
 	private var newGameButton: some View {
-		
 		MenuButtonComponent(title: "Новая игра", action: game.startNewGame)
 			.padding(.top, 80)
-		
 	}
 	
 	private var table: some View {
@@ -102,24 +98,21 @@ struct GameView: View {
 		}
 		.padding(Constants.gridSpace)
 		.background {
-			base
-				.foregroundStyle(.primary)
-			
+			base.foregroundStyle(.primary)
 		}
 	}
 	
 	private var gameModePicker: some View {
-			Menu {
-				Picker("Choose sort order", selection: $game.gameMode) {
-					ForEach (GameModes.allCases, id: \.self) {
-						Text($0.rawValue)
-					}
+		Menu {
+			Picker("Choose sort order", selection: $game.gameMode) {
+				ForEach (GameModes.allCases, id: \.self) {
+					Text($0.rawValue)
 				}
-			} label: {
-				Text("Режим игры")
-				
 			}
-		
+		} label: {
+			Text("Режим игры")
+			
+		}
 	}
 	
 	struct GestureAlertOnChangeModifiers: ViewModifier {
@@ -154,9 +147,7 @@ struct GameView: View {
 		static let gridSpace: CGFloat = 8
 		static let gridColumns = Array(repeating: GridItem(.fixed(cellSize), spacing: gridSpace), count: gridSize)
 		static let cornerRadius: CGFloat = 4
-		
 	}
-	
 }
 
 #Preview {
